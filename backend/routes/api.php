@@ -23,7 +23,9 @@ Route::controller(AuthController::class)->group(function() {
 
 Route::prefix('siswa')->group(function () {
     Route::get('/', [SiswaController::class, 'index'])->name('get.siswa');
+    Route::get('/edit/{id}', [SiswaController::class, 'edit'])->name('edit.siswa');
 })->middleware('auth:api');
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

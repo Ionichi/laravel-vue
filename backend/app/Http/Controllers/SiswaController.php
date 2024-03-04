@@ -10,8 +10,9 @@ use Yajra\DataTables\Facades\DataTables;
 class SiswaController extends Controller
 {
     public function index() {
-        $siswa = Siswa::has('user')->get();
-        return DataTables::of($siswa)
+        $data = Siswa::has('user')->get();
+
+        return DataTables::of($data)
             ->addIndexColumn()
             ->editColumn('nama_siswa', function($q) {
                 return ucwords($q->nama_siswa);
@@ -43,20 +44,60 @@ class SiswaController extends Controller
                 return $q->user->username;
             })
             ->addColumn('fullname', function ($q) {
-                return $q->user->fullname;
+                return ucwords($q->user->fullname);
             })
             ->addColumn('gender', function ($q) {
-                return $q->user->gender;
+                if($q->user->gender == 'L') {
+                    return 'Laki-laki';
+                }
+                else {
+                    return 'Perempuan';
+                }
             })
             ->addColumn('email', function ($q) {
                 return $q->user->email;
             })
             ->addColumn('role', function ($q) {
-                return $q->user->role;
+                if($q->user->role == 'A') {
+                    return 'Admin';
+                }
+                else if ($q->user->role == 'T') {
+                    return 'Tutor';
+                }
+                else {
+                    return 'Murid';
+                }
             })
             ->addColumn('status_user', function ($q) {
-                return $q->user->status;
+                if ($q->user->status == 'A') {
+                    return 'Aktif';
+                } else {
+                    return 'Nonaktif';
+                }
             })
             ->rawColumns([''])->make(true);
+    }
+
+    public function edit($id) {
+        $data = Siswa::find($id);
+        return response()->json([
+            "id" => $data->id,
+            "user_id" => $data->user_id,
+            "nama_siswa" => $data->nama_siswa,
+            "nama_panggilan" => $data->nama_panggilan,
+            "no_wa" => $data->no_wa,
+            "provinsi" => $data->provinsi,
+            "kota" => $data->kota,
+            "kode_pos" => $data->kode_pos,
+            "alamat_lengkap" => $data->alamat_lengkap,
+            "tgl_lahir" => $data->tgl_lahir,
+            "status" => $data->status,
+            "username" => $data->user->username,
+            "fullname" => $data->user->fullname,
+            "gender" => $data->user->gender,
+            "email" => $data->user->email,
+            "role" => $data->user->role,
+            "status_user" => $data->user->status,
+        ]);
     }
 }
