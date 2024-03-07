@@ -31,13 +31,13 @@ class AuthController extends Controller
 
         if(!$token) {
             return response()->json([
-                'success' => false,
+                'status' => 'error',
                 'message' => 'Username atau Password salah!'
             ], 401);
         }
 
         return response()->json([
-            'success' => true,
+            'status' => 'success',
             'user' => Auth::user(),
             'token_type' => 'bearer',
             'token' => $token
@@ -47,7 +47,7 @@ class AuthController extends Controller
     public function logout(Request $request) {
         Auth::logout();
         return response()->json([
-            'success' => true,
+            'status' => 'success',
             'message' => 'Berhasil Logout!'
         ]);
     }

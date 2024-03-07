@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('username', 50)->unique();
             $table->string('fullname', 200);
             $table->enum('gender', ['L', 'P']);
-            $table->string('email', 200)->unique();
+            $table->string('email', 200);
             $table->string('password', 255);
             $table->enum('role', ['A', 'T', 'M']);
             $table->enum('status', ['A', 'N']);

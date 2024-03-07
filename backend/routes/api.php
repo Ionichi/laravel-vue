@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SiswaController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,13 +22,21 @@ Route::controller(AuthController::class)->group(function() {
     Route::post('logout', 'logout')->name('logout');
 });
 
-Route::prefix('siswa')->group(function () {
-    Route::get('/', [SiswaController::class, 'index'])->name('get.siswa');
-    Route::get('/edit/{id}', [SiswaController::class, 'edit'])->name('edit.siswa');
-})->middleware('auth:api');
+Route::middleware('auth:api')->group(function(){
+    Route::prefix('siswa')->group(function () {
+        Route::get('/', [SiswaController::class, 'index'])->name('get.siswa');
+        Route::post('/create', [SiswaController::class, 'create'])->name('create.siswa');
+        Route::get('/edit/{id}', [SiswaController::class, 'edit'])->name('edit.siswa');
+        Route::post('/update', [SiswaController::class, 'update'])->name('update.siswa');
+        Route::post('/delete/{id}', [SiswaController::class, 'destroy'])->name('delete.siswa');
+    });
 
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+    Route::get('/me', function() {
+        return Auth::user();
+    });
 });
+
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
