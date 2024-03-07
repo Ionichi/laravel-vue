@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\TutorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,14 @@ Route::middleware('auth:api')->group(function(){
         Route::get('/edit/{id}', [SiswaController::class, 'edit'])->name('edit.siswa');
         Route::post('/update', [SiswaController::class, 'update'])->name('update.siswa');
         Route::post('/delete/{id}', [SiswaController::class, 'destroy'])->name('delete.siswa');
+    });
+
+    Route::prefix('tutor')->group(function () {
+        Route::get('/', [TutorController::class, 'index'])->name('get.tutor');
+        Route::post('/create', [TutorController::class, 'create'])->name('create.tutor');
+        Route::get('/edit/{id}', [TutorController::class, 'edit'])->name('edit.tutor');
+        Route::post('/update', [TutorController::class, 'update'])->name('update.tutor'); 
+        Route::post('/delete/{id}', [TutorController::class, 'destroy'])->name('delete.siswa');
     });
 
     Route::get('/me', function() {
