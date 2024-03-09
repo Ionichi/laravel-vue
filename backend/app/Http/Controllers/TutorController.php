@@ -14,7 +14,8 @@ use Yajra\DataTables\Facades\DataTables;
 
 class TutorController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $data = Tutor::has('user')->get();
 
         return DataTables::of($data)
@@ -81,7 +82,8 @@ class TutorController extends Controller
             ->rawColumns(['action'])->make(true);
     }
 
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'username' => 'required|unique:users|max:50',
             'fullname' => 'required|max:200',
@@ -130,46 +132,54 @@ class TutorController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Berhasil menambahkan data tutor!'
+                'message' => 'Berhasil menambahkan data tutor!',
             ], 200);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
                 'status' => 'error',
-                'message' => 'Gagal menambahkan data tutor!'
+                'message' => 'Gagal menambahkan data tutor!',
+                'data' => $e->getMessage()
             ], 500);
         }
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         try {
             $id = Crypt::decryptString($id);
             $data = Tutor::findOrFail($id);
 
             return response()->json([
-                "id" => Crypt::encryptString($data->id),
-                "nama_tutor" => $data->nama_tutor,
-                "no_wa" => $data->no_wa,
-                "provinsi" => $data->provinsi,
-                "kota" => $data->kota,
-                "kode_pos" => $data->kode_pos,
-                "alamat_lengkap" => $data->alamat_lengkap,
-                "tgl_lahir" => $data->tgl_lahir,
-                "status" => $data->status,
-                "username" => $data->user->username,
-                "fullname" => $data->user->fullname,
-                "gender" => $data->user->gender,
-                "email" => $data->user->email,
+                "status" => "success",
+                "message" => "Data ditemukan!",
+                "data" => [
+                    "id" => Crypt::encryptString($data->id),
+                    "nama_tutor" => $data->nama_tutor,
+                    "no_wa" => $data->no_wa,
+                    "provinsi" => $data->provinsi,
+                    "kota" => $data->kota,
+                    "kode_pos" => $data->kode_pos,
+                    "alamat_lengkap" => $data->alamat_lengkap,
+                    "tgl_lahir" => $data->tgl_lahir,
+                    "status" => $data->status,
+                    "username" => $data->user->username,
+                    "fullname" => $data->user->fullname,
+                    "gender" => $data->user->gender,
+                    "email" => $data->user->email,
+                ]
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Data tidak ditemukan!'
+                'message' => 'Data tidak ditemukan!',
+                'data' => $e->getMessage(),
             ], 404);
         }
     }
 
-    public function update(Request $request) {
+    public function update(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'id' => 'required',
             'fullname' => 'required|max:200',
@@ -222,12 +232,14 @@ class TutorController extends Controller
             DB::rollBack();
             return response()->json([
                 'status' => 'error',
-                'message' => 'Gagal mengubah data tutor!'
+                'message' => 'Gagal mengubah data tutor!',
+                'data' => $e->getMessage()
             ], 500);
         }
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         DB::beginTransaction();
         try {
             $id = Crypt::decryptString($id);
@@ -250,7 +262,8 @@ class TutorController extends Controller
             DB::rollBack();
             return response()->json([
                 'status' => 'error',
-                'message' => 'Gagal menghapus data tutor!'
+                'message' => 'Gagal menghapus data tutor!',
+                'data' => $e->getMessage(),
             ], 500);
         }
     }

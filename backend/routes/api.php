@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\TutorController;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(AuthController::class)->group(function() {
     Route::post('/login', 'login')->name('login');
-    Route::post('logout', 'logout')->name('logout');
+    Route::post('/logout', 'logout')->name('logout');
 });
 
 Route::middleware('auth:api')->group(function(){
@@ -37,7 +38,16 @@ Route::middleware('auth:api')->group(function(){
         Route::post('/create', [TutorController::class, 'create'])->name('create.tutor');
         Route::get('/edit/{id}', [TutorController::class, 'edit'])->name('edit.tutor');
         Route::post('/update', [TutorController::class, 'update'])->name('update.tutor'); 
-        Route::post('/delete/{id}', [TutorController::class, 'destroy'])->name('delete.siswa');
+        Route::post('/delete/{id}', [TutorController::class, 'destroy'])->name('delete.tutor');
+    });
+
+    Route::prefix('course')->group(function () {
+        Route::get('/', [CourseController::class, 'index'])->name('get.course');
+        Route::get('/get-tutor', [CourseController::class, 'get_tutor'])->name('get.course.tutor');
+        Route::post('/create', [CourseController::class, 'create'])->name('create.course');
+        Route::get('/edit/{id}', [CourseController::class, 'edit'])->name('edit.course');
+        Route::post('/update', [CourseController::class, 'update'])->name('update.course');
+        Route::post('/delete/{id}', [CourseController::class, 'destroy'])->name('delete.course');
     });
 
     Route::get('/me', function() {

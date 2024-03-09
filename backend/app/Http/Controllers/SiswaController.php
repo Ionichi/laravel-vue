@@ -14,7 +14,8 @@ use Yajra\DataTables\Facades\DataTables;
 
 class SiswaController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $data = Siswa::has('user')->get();
 
         return DataTables::of($data)
@@ -40,8 +41,7 @@ class SiswaController extends Controller
             ->editColumn('status', function ($q) {
                 if($q->status == 'A') {
                     return 'Aktif';
-                }
-                else {
+                } else {
                     return 'Nonaktif';
                 }
             })
@@ -54,8 +54,7 @@ class SiswaController extends Controller
             ->addColumn('gender', function ($q) {
                 if($q->user->gender == 'L') {
                     return 'Laki-laki';
-                }
-                else {
+                } else {
                     return 'Perempuan';
                 }
             })
@@ -65,11 +64,9 @@ class SiswaController extends Controller
             ->addColumn('role', function ($q) {
                 if($q->user->role == 'A') {
                     return 'Admin';
-                }
-                else if ($q->user->role == 'T') {
+                } else if ($q->user->role == 'T') {
                     return 'Tutor';
-                }
-                else {
+                } else {
                     return 'Murid';
                 }
             })
@@ -88,7 +85,8 @@ class SiswaController extends Controller
             ->rawColumns(['action'])->make(true);
     }
 
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'username' => 'required|unique:users|max:50',
             'fullname' => 'required|max:200',
@@ -141,47 +139,53 @@ class SiswaController extends Controller
                 'status' => 'success',
                 'message' => 'Berhasil menambahkan data siswa!'
             ], 200);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
                 'status' => 'error',
-                'message' => 'Gagal menambahkan data siswa!'
+                'message' => 'Gagal menambahkan data siswa!',
+                'data' => $e->getMessage()
             ], 500);
         }
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         try {
             $id = Crypt::decryptString($id);
             $data = Siswa::findOrFail($id);
     
             return response()->json([
-                "id" => Crypt::encryptString($data->id),
-                "nama_siswa" => $data->nama_siswa,
-                "nama_panggilan" => $data->nama_panggilan,
-                "no_wa" => $data->no_wa,
-                "provinsi" => $data->provinsi,
-                "kota" => $data->kota,
-                "kode_pos" => $data->kode_pos,
-                "alamat_lengkap" => $data->alamat_lengkap,
-                "tgl_lahir" => $data->tgl_lahir,
-                "status" => $data->status,
-                "username" => $data->user->username,
-                "fullname" => $data->user->fullname,
-                "gender" => $data->user->gender,
-                "email" => $data->user->email,
+                "status" => "success",
+                "message" => "Data ditemukan!",
+                'data' => [
+                    "id" => Crypt::encryptString($data->id),
+                    "nama_siswa" => $data->nama_siswa,
+                    "nama_panggilan" => $data->nama_panggilan,
+                    "no_wa" => $data->no_wa,
+                    "provinsi" => $data->provinsi,
+                    "kota" => $data->kota,
+                    "kode_pos" => $data->kode_pos,
+                    "alamat_lengkap" => $data->alamat_lengkap,
+                    "tgl_lahir" => $data->tgl_lahir,
+                    "status" => $data->status,
+                    "username" => $data->user->username,
+                    "fullname" => $data->user->fullname,
+                    "gender" => $data->user->gender,
+                    "email" => $data->user->email,
+                ]
             ]);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Data tidak ditemukan!'
+                'message' => 'Data tidak ditemukan!',
+                'data' => $e->getMessage(),
             ], 404);
         }
     }
 
-    public function update(Request $request) {
+    public function update(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'id' => 'required',
             'fullname' => 'required|max:200',
@@ -238,12 +242,14 @@ class SiswaController extends Controller
             DB::rollBack();
             return response()->json([
                 'status' => 'error',
-                'message' => 'Gagal mengubah data siswa!'
+                'message' => 'Gagal mengubah data siswa!',
+                'data' => $e->getMessage(),
             ], 500);
         }
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         DB::beginTransaction();
         try {
             $id = Crypt::decryptString($id);
@@ -269,7 +275,8 @@ class SiswaController extends Controller
             DB::rollBack();
             return response()->json([
                 'status' => 'error',
-                'message' => 'Gagal menghapus data siswa!'
+                'message' => 'Gagal menghapus data siswa!',
+                'data' => $e->getMessage()
             ], 500);
         }
     }
