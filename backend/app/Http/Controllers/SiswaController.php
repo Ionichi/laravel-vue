@@ -223,7 +223,7 @@ class SiswaController extends Controller
             $dataSiswa->status = $request->status;
             $dataSiswa->update();
 
-            $dataUser = User::find($dataSiswa->user_id);
+            $dataUser = User::findOrFail($dataSiswa->user_id);
             $dataUser->fullname = $request->fullname;
             $dataUser->gender = $request->gender;
             if($request->filled('password'))

@@ -214,7 +214,7 @@ class TutorController extends Controller
             $dataTutor->status = $request->status;
             $dataTutor->update();
 
-            $dataUser = User::find($dataTutor->user_id);
+            $dataUser = User::findOrFail($dataTutor->user_id);
             $dataUser->fullname = $request->fullname;
             $dataUser->gender = $request->gender;
             if ($request->filled('password'))
