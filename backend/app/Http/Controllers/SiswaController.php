@@ -174,7 +174,7 @@ class SiswaController extends Controller
                     "gender" => $data->user->gender,
                     "email" => $data->user->email,
                 ]
-            ]);
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',

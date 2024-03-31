@@ -49,13 +49,10 @@ Route::middleware('auth:api')->group(function(){
         Route::post('/update', [CourseController::class, 'update'])->name('update.course');
         Route::post('/delete/{id}', [CourseController::class, 'destroy'])->name('delete.course');
     });
-
-    Route::get('/me', function() {
-        return Auth::user();
-    });
+    
 });
 
+Route::get('/me', [AuthController::class, 'me'])->name('auth.me');
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-

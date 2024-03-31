@@ -1,13 +1,44 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vite App</title>
-  </head>
-  <body>
-    <div id="app"></div>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/favicon.ico" />
+    <title>Laravu</title>
+    <meta name="keywords" content="laravel crud, vue js crud, laravel + vue js crud">
+    <meta name="description" content="CRUD sederhana dengan Laravel, Vue.js dan MySql">
+    <meta name="author" content="@Ionichi">
+    <meta name="google" content="nostranslate">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css">
+
+</head>
+<style>
+    body {
+        padding: 0;
+        margin: 0;
+    }
+
+    #app {
+        overflow: hidden;
+    }
+
+    [v-cloak] {
+        display: none;
+    }
+</style>
+<body>
+    <noscript>
+        <strong>
+            We're sorry but Laravu doesn't work properly without Javascript enabled. Please
+            enable it to continue.
+        </strong>
+    </noscript>
+    <div id="app" v-cloak></div>
     <script type="module" src="/src/main.js"></script>
-  </body>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+</body>
 </html>

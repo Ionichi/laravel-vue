@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('tutor', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->uuid('user_id')->nullable(false);
             $table->string('nama_tutor', 200);
             $table->string('no_wa', 15);
             $table->string('provinsi', 50);
