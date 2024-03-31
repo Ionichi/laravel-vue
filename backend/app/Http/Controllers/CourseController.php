@@ -14,64 +14,28 @@ class CourseController extends Controller
 {
     public function index()
     {
-        $data = Course::has('tutor')->get();
+        $data = Course::has('tutor')->get()
+            ->map(function($data) {
+                return [
+                    'id' => Crypt::encryptString($data->id),
+                    'tutor_id' => $data->tutor_id,
+                    'nama_kursus' => ucwords($data->nama_kursus),
+                    'harga' => 'Rp ' . number_format($data->harga),
+                    'status' => ($data->status == 'A') ? 'Aktif' : 'Nonaktif',
+                    'nama_tutor' => ucwords($data->tutor->nama_tutor),
+                    'username' => $data->tutor->user->username,
+                    'gender' => ($data->tutor->user->gender == 'L') ? 'Laki-laki' : 'Perempuan',
+                    'no_wa' => $data->tutor->no_wa,
+                    'email' => $data->tutor->user->email,
+                    'status_tutor' => ($data->tutor->status == 'A') ? 'Aktif' : 'Nonaktif',
+                ];
+            });
 
-        return DataTables::of($data)
-            ->addIndexColumn()
-            ->editColumn('nama_kursus', function ($q) {
-                return ucwords($q->nama_kursus);
-            })
-            ->editColumn('harga', function ($q) {
-                return "Rp " . number_format($q->harga);
-            })
-            ->editColumn('status', function ($q) {
-                if ($q->status == 'A') {
-                    return 'Aktif';
-                } else {
-                    return 'Nonaktif';
-                }
-            })
-            ->addColumn('nama_tutor', function ($q) {
-                return ucwords($q->tutor->nama_tutor);
-            })
-            ->addColumn('username', function ($q) {
-                return $q->tutor->user->username;
-            })
-            ->addColumn('gender', function ($q) {
-                if ($q->tutor->user->gender == 'L') {
-                    return 'Laki-laki';
-                } else {
-                    return 'Perempuan';
-                }
-            })
-            ->addColumn('no_wa', function ($q) {
-                return ucwords($q->tutor->no_wa);
-            })
-            ->addColumn('email', function ($q) {
-                return $q->tutor->user->email;
-            })
-            ->addColumn('role', function ($q) {
-                if ($q->tutor->user->role == 'A') {
-                    return 'Admin';
-                } else if ($q->tutor->user->role == 'T') {
-                    return 'Tutor';
-                } else {
-                    return 'Murid';
-                }
-            })
-            ->addColumn('status_tutor', function ($q) {
-                if ($q->tutor->status == 'A') {
-                    return 'Aktif';
-                } else {
-                    return 'Nonaktif';
-                }
-            })
-            ->addColumn('action', function ($q) {
-                $button = '<button type="button" id="' . Crypt::encryptString($q->id) . '" class="btnEdit btn btn-warning waves-effect waves-light rounded mr-1"><i class="fa fa-edit"></i></button>';
-                $button .= '<button type="button" id="' . Crypt::encryptString($q->id) . '" class="btnDelete btn btn-danger waves-effect waves-light rounded mr-1"><i class="fa fa-trash"></i></button>';
-                return $button;
-            })
-            ->rawColumns(['action'])->make(true);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Berhasil mengambil data courses...',
+            'data' => $data,
+        ]);
     }
 
     public function get_tutor()
@@ -79,7 +43,7 @@ class CourseController extends Controller
         $data = Tutor::has('user')->where('status', 'A')->get()
             ->map(function ($data) {
                 return [
-                    'tutor_id' => Crypt::encryptString($data->id),
+                    'tutor_id' => $data->id,
                     'nama_tutor' => $data->nama_tutor,
                     'status' => $data->status,
                 ];
@@ -117,10 +81,8 @@ class CourseController extends Controller
 
         DB::beginTransaction();
         try {
-            $tutor_id = Crypt::decryptString($request->tutor_id);
-
             $dataCourse = new Course();
-            $dataCourse->tutor_id = $tutor_id;
+            $dataCourse->tutor_id = $request->tutor_id;
             $dataCourse->nama_kursus = $request->nama_kursus;
             $dataCourse->harga = $request->harga;
             $dataCourse->status = 'A';
@@ -153,7 +115,7 @@ class CourseController extends Controller
                 "message" => "Data ditemukan!",
                 "data" => [
                     "id" => Crypt::encryptString($data->id),
-                    "tutor_id" => Crypt::encryptString($data->tutor_id),
+                    "tutor_id" => $data->tutor_id,
                     "nama_kursus" => $data->nama_kursus,
                     "harga" => $data->harga,
                     "status" => $data->status,
@@ -188,10 +150,9 @@ class CourseController extends Controller
         DB::beginTransaction();
         try {
             $id = Crypt::decryptString($request->id);
-            $tutor_id = Crypt::decryptString($request->tutor_id);
 
             $dataCourse = Course::findOrFail($id);
-            $dataCourse->tutor_id = $tutor_id;
+            $dataCourse->tutor_id = $request->tutor_id;
             $dataCourse->nama_kursus = $request->nama_kursus;
             $dataCourse->harga = $request->harga;
             $dataCourse->status = $request->status;

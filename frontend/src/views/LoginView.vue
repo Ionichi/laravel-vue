@@ -48,10 +48,7 @@
                 });
 
                 if(passLogin) {
-                    console.log('berhasil');
                     router.push('/');
-                } else {
-                    console.log('tidak berhasil');
                 }
             }
         }

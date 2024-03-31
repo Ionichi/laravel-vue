@@ -16,70 +16,31 @@ class TutorController extends Controller
 {
     public function index()
     {
-        $data = Tutor::has('user')->get();
-
-        return DataTables::of($data)
-            ->addIndexColumn()
-            ->editColumn('nama_tutor', function ($q) {
-                return ucwords($q->nama_tutor);
-            })
-            ->editColumn('provinsi', function ($q) {
-                return ucwords($q->provinsi);
-            })
-            ->editColumn('kota', function ($q) {
-                return ucwords($q->kota);
-            })
-            ->editColumn('alamat_lengkap', function ($q) {
-                return ucfirst($q->alamat_lengkap);
-            })
-            ->editColumn('tgl_lahir', function ($q) {
-                return Carbon::parse($q->tgl_lahir)->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y');
-            })
-            ->editColumn('status', function ($q) {
-                if ($q->status == 'A') {
-                    return 'Aktif';
-                } else {
-                    return 'Nonaktif';
-                }
-            })
-            ->addColumn('username', function ($q) {
-                return $q->user->username;
-            })
-            ->addColumn('fullname', function ($q) {
-                return ucwords($q->user->fullname);
-            })
-            ->addColumn('gender', function ($q) {
-                if ($q->user->gender == 'L') {
-                    return 'Laki-laki';
-                } else {
-                    return 'Perempuan';
-                }
-            })
-            ->addColumn('email', function ($q) {
-                return $q->user->email;
-            })
-            ->addColumn('role', function ($q) {
-                if ($q->user->role == 'A') {
-                    return 'Admin';
-                } else if ($q->user->role == 'T') {
-                    return 'Tutor';
-                } else {
-                    return 'Murid';
-                }
-            })
-            ->addColumn('status_user', function ($q) {
-                if ($q->user->status == 'A') {
-                    return 'Aktif';
-                } else {
-                    return 'Nonaktif';
-                }
-            })
-            ->addColumn('action', function ($q) {
-                $button = '<button type="button" id="' . Crypt::encryptString($q->id) . '" class="btnEdit btn btn-warning waves-effect waves-light rounded mr-1"><i class="fa fa-edit"></i></button>';
-                $button .= '<button type="button" id="' . Crypt::encryptString($q->id) . '" class="btnDelete btn btn-danger waves-effect waves-light rounded mr-1"><i class="fa fa-trash"></i></button>';
-                return $button;
-            })
-            ->rawColumns(['action'])->make(true);
+        $data = Tutor::has('user')->get()
+            ->map(function($data) {
+                return [
+                    'id' => Crypt::encryptString($data->id),
+                    'user_id' => $data->user_id,
+                    'nama_tutor' => ucwords($data->nama_tutor),
+                    'no_wa' => $data->no_wa,
+                    'provinsi' => ucwords($data->provinsi),
+                    'kota' => ucwords($data->kota),
+                    'kode_pos' => $data->kode_pos,
+                    'alamat_lengkap' => ucfirst($data->alamat_lengkap),
+                    'tgl_lahir' => Carbon::parse($data->tgl_lahir)->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y'),
+                    'status' => ($data->status == 'A') ? 'Aktif' : 'Nonaktif',
+                    'username' => $data->user->username,
+                    'fullname' => ucwords($data->user->fullname),
+                    'gender' => ($data->user->gender == 'L') ? 'Laki-laki' : 'Perempuan',
+                    'email' => $data->user->email,
+                ];
+            });
+        
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Berhasil mengambil data tutor...',
+            'data' => $data,
+        ]);
     }
 
     public function create(Request $request)
