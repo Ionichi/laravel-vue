@@ -39,6 +39,18 @@ const routes = [
         meta: { requiresAuth: true },
     },
     {
+        path: '/tutor/create',
+        name: 'tutor-create',
+        component: () => import('../views/pages/tutor/TutorCreateView.vue'),
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/tutor/edit/:id',
+        name: 'tutor-edit',
+        component: () => import('../views/pages/tutor/TutorEditView.vue'),
+        meta: { requiresAuth: true },
+    },
+    {
         path: '/:catchAll(.*)',
         name: 'not-found',
         // route level code-splitting

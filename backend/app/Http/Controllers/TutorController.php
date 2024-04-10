@@ -116,7 +116,6 @@ class TutorController extends Controller
                 "message" => "Data ditemukan!",
                 "data" => [
                     "id" => Crypt::encryptString($data->id),
-                    "nama_tutor" => $data->nama_tutor,
                     "no_wa" => $data->no_wa,
                     "provinsi" => $data->provinsi,
                     "kota" => $data->kota,

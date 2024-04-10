@@ -9,7 +9,9 @@
                 <li>
                     <router-link to="/siswa" class="nav-link">Data Siswa</router-link>
                 </li>
-                <li>Data Tutor</li>
+                <li>
+                    <router-link to="/tutor" class="nav-link">Data Tutor</router-link>
+                </li>
                 <li>Data Course</li>
             </ol>
         </section>

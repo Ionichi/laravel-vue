@@ -61,7 +61,6 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating mb-3">
-                        <!-- <label for="gender">Jenis Kelamin <span class="text-danger">*</span></label> -->
                         <select id="gender" class="form-control" v-model="siswa.gender" required>
                             <option value=""> -- Pilih Jenis Kelamin -- </option>
                             <option value="L">Laki-laki</option>
