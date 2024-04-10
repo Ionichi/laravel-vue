@@ -9,16 +9,16 @@
                         <form @submit.prevent="sendLogin">
                             <div class="form-floating">
                                 <input type="username" v-model="username" class="form-control"
-                                    id="username" placeholder="Your username...">
+                                    id="username" placeholder="Your username..." required>
                                 <label for="username">Username</label>
                             </div> <br>
     
                             <div class="form-floating">
                                 <input type="password" v-model="password" class="form-control" id="password"
-                                    placeholder="Your password...">
+                                    placeholder="Your password..." required>
                                 <label for="password">Password</label>
                             </div>
-                            <button class="w-100 btn btn-lg btn-dark mt-3" type="submit">Login</button>
+                            <button class="w-100 btn btn-lg text-light btn-dark mt-3" type="submit">Login</button>
                         </form>
                     </main>
                 </div>

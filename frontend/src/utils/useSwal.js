@@ -59,11 +59,32 @@ export default function useSwal() {
         });
     }
 
+    const questionAlert = (message) => {
+        return new Promise(async (resolve) => {
+            await Swal.fire({
+                title: 'Konfirmasi!',
+                text: `${message}`,
+                icon: 'question',
+                confirmButtonText: 'Oke',
+                confirmButtonColor: '#DC3545',
+                showCancelButton: true,
+                cancelButtonText: 'Batal',
+            }).then((result) => {
+                if(result.isConfirmed) {
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
+            });
+        });
+    }
+
     return {
         loadingAlert,
         successAlert,
         errorAlert,
         validateAlert,
         informationAlert,
+        questionAlert,
     };
 }

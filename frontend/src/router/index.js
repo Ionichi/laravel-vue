@@ -15,16 +15,35 @@ const routes = [
         component: () => import('../views/LoginView.vue'),
     },
     {
-        path: '/about',
-        name: 'about',
-        // route level code-splitting
-        // this generates a separate chunk (About.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import('../views/AboutView.vue')
+        path: '/siswa',
+        name: 'siswa',
+        component: () => import('../views/pages/siswa/SiswaView.vue'),
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/siswa/create',
+        name: 'siswa-create',
+        component: () => import('../views/pages/siswa/SiswaCreateView.vue'),
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/siswa/edit/:id',
+        name: 'siswa-edit',
+        component: () => import('../views/pages/siswa/SiswaEditView.vue'),
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/tutor',
+        name: 'tutor',
+        component: () => import('../views/pages/tutor/TutorView.vue'),
+        meta: { requiresAuth: true },
     },
     {
         path: '/:catchAll(.*)',
         name: 'not-found',
+        // route level code-splitting
+        // this generates a separate chunk (404View.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
         component: () => import('../views/404View.vue')
     }
 ]

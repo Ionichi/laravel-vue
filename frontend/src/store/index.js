@@ -44,7 +44,6 @@ export const useAuthStore = defineStore({
                 if (response.status === 200) {
                     return response.data;
                 } else {
-                    console.error(response.data);
 
                     return false;
                 }

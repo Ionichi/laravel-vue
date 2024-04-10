@@ -16,7 +16,7 @@ class SiswaController extends Controller
 {
     public function index()
     {
-        $data = Siswa::has('user')->get()
+        $data = Siswa::has('user')->orderBy('status', 'ASC')->get()
             ->map(function($data) {
                 return [
                     'id' => Crypt::encryptString($data->id),
@@ -118,7 +118,6 @@ class SiswaController extends Controller
                 "message" => "Data ditemukan!",
                 'data' => [
                     "id" => Crypt::encryptString($data->id),
-                    "nama_siswa" => $data->nama_siswa,
                     "nama_panggilan" => $data->nama_panggilan,
                     "no_wa" => $data->no_wa,
                     "provinsi" => $data->provinsi,
