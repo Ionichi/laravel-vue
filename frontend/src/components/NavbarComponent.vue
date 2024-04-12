@@ -23,6 +23,9 @@
                     <li class="nav-item">
                         <router-link to="/tutor" active-class="active" class="nav-link">Tutor</router-link>
                     </li>
+                    <li class="nav-item">
+                        <router-link to="/course" active-class="active" class="nav-link">Course</router-link>
+                    </li>
                 </ul>
                 <ul class="navbar-nav">
                     <li v-if="authStore.authenticate == true" class="nav-item">

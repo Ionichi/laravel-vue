@@ -8,6 +8,7 @@
     import axios from "axios";
     import useSwal from '@/utils/useSwal';
     export default {
+        name: 'TutorView',
         data: () => ({
             dataTitle: 'Tutor',
             headers: [

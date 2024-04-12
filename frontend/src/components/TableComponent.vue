@@ -21,6 +21,11 @@
                             :class="item.status === 'Aktif' ? 'text-bg-success' : 'text-bg-danger'">{{ item.status
                             }}</span>
                     </div>
+                    <div v-else-if="header.key === 'status_tutor'">
+                        <span class="badge p-2"
+                            :class="item.status_tutor === 'Aktif' ? 'text-bg-success' : 'text-bg-danger'">{{ item.status_tutor
+                            }}</span>
+                    </div>
                     <div v-else-if="header.key === 'actions'">
                         <span @click="this.$parent.editData(item.id)" class="p-1 text-dark">
                             <v-icon icon="mdi-pencil" />

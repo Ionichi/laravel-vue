@@ -18,7 +18,6 @@ class CourseController extends Controller
             ->map(function($data) {
                 return [
                     'id' => Crypt::encryptString($data->id),
-                    'tutor_id' => $data->tutor_id,
                     'nama_kursus' => ucwords($data->nama_kursus),
                     'harga' => 'Rp ' . number_format($data->harga),
                     'status' => ($data->status == 'A') ? 'Aktif' : 'Nonaktif',
@@ -35,41 +34,42 @@ class CourseController extends Controller
             'status' => 'success',
             'message' => 'Berhasil mengambil data courses...',
             'data' => $data,
-        ]);
+        ], 200);
     }
 
     public function get_tutor()
     {
-        $data = Tutor::has('user')->where('status', 'A')->get()
+        $data = Tutor::whereHas('user', function($q) {
+            $q->where('status', 'A');
+        })->where('status', 'A')->get()
             ->map(function ($data) {
                 return [
-                    'tutor_id' => $data->id,
+                    'tutor_user_id' => $data->user->id,
                     'nama_tutor' => $data->nama_tutor,
-                    'status' => $data->status,
                 ];
             });
 
         if ($data) {
             return response()->json([
                 'status' => 'success',
-                'message' => 'Data tutor',
+                'message' => 'Data tutor...',
                 'data' => $data
-            ]);
+            ], 200);
         } else {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Data tutor belum ada!',
                 'data' => []
-            ]);
+            ], 404);
         }
     }
 
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'tutor_id' => 'required',
+            'tutor_user_id' => 'required',
             'nama_kursus' => 'required|max:100',
-            'harga' => 'required|numeric',
+            'harga' => 'required|numeric|min:0',
         ]);
 
         if ($validator->fails()) {
@@ -81,8 +81,10 @@ class CourseController extends Controller
 
         DB::beginTransaction();
         try {
+            $dataTutor = Tutor::where('user_id', $request->tutor_user_id)->first();
+
             $dataCourse = new Course();
-            $dataCourse->tutor_id = $request->tutor_id;
+            $dataCourse->tutor_id = $dataTutor->id;
             $dataCourse->nama_kursus = $request->nama_kursus;
             $dataCourse->harga = $request->harga;
             $dataCourse->status = 'A';
@@ -115,12 +117,12 @@ class CourseController extends Controller
                 "message" => "Data ditemukan!",
                 "data" => [
                     "id" => Crypt::encryptString($data->id),
-                    "tutor_id" => $data->tutor_id,
+                    "tutor_user_id" => $data->tutor->user->id,
                     "nama_kursus" => $data->nama_kursus,
                     "harga" => $data->harga,
                     "status" => $data->status,
                 ]
-            ]);
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -134,9 +136,9 @@ class CourseController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id' => 'required',
-            'tutor_id' => 'required',
+            'tutor_user_id' => 'required',
             'nama_kursus' => 'required|max:100',
-            'harga' => 'required|numeric',
+            'harga' => 'required|numeric|min:0',
             'status' => 'required|max:1'
         ]);
 
@@ -150,9 +152,10 @@ class CourseController extends Controller
         DB::beginTransaction();
         try {
             $id = Crypt::decryptString($request->id);
+            $dataTutor = Tutor::where('user_id', $request->tutor_user_id)->first();
 
             $dataCourse = Course::findOrFail($id);
-            $dataCourse->tutor_id = $request->tutor_id;
+            $dataCourse->tutor_id = $dataTutor->id;
             $dataCourse->nama_kursus = $request->nama_kursus;
             $dataCourse->harga = $request->harga;
             $dataCourse->status = $request->status;

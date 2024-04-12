@@ -13,7 +13,6 @@
         <section class="container pb-5">
             <form @submit.prevent="sendData" class="row needs-validation" novalidate>
                 <div class="col-md-6">
-                    <input type="hidden" name="id" :value="tutor.id">
                     <div class="form-floating mb-3">
                         <input type="username" class="form-control" id="username" placeholder="Your username" :value="tutor.username" required readonly disabled>
                         <label for="username">Username <span class="text-danger">*</span></label>

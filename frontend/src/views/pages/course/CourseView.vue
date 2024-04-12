@@ -1,16 +1,16 @@
 <template>
     <main>
         <NavbarComponent />
-        <TableComponent :dataTitle="dataTitle" :headers="headers" :url="url" ref="siswaTable" />
+        <TableComponent :dataTitle="dataTitle" :headers="headers" :url="url" ref="courseTable" />
     </main>
 </template>
 <script>
-    import axios from "axios";
     import useSwal from '@/utils/useSwal';
+    import axios from 'axios';
     export default {
-        name: 'SiswaView',
+        name: 'CourseView',
         data: () => ({
-            dataTitle: 'Siswa',
+            dataTitle: 'Course',
             headers: [
                 {
                     title: 'No',
@@ -24,14 +24,24 @@
                     key: 'actions',
                 },
                 {
-                    title: 'Status',
+                    title: 'Status Kursus',
                     align: 'center',
                     key: 'status',
                 },
                 {
-                    title: 'Username',
+                    title: 'Nama Kursus',
                     align: 'start',
-                    key: 'username',
+                    key: 'nama_kursus',
+                },
+                {
+                    title: 'Harga (Rp)',
+                    align: 'center',
+                    key: 'harga',
+                },
+                {
+                    title: 'Nama Mentor',
+                    align: 'start',
+                    key: 'nama_tutor',
                 },
                 {
                     title: 'Email',
@@ -39,14 +49,9 @@
                     key: 'email',
                 },
                 {
-                    title: 'Nama Lengkap',
+                    title: 'Username',
                     align: 'start',
-                    key: 'nama_siswa',
-                },
-                {
-                    title: 'Nama Panggilan',
-                    align: 'start',
-                    key: 'nama_panggilan',
+                    key: 'username',
                 },
                 {
                     title: 'Jenis Kelamin',
@@ -54,48 +59,28 @@
                     key: 'gender',
                 },
                 {
-                    title: 'Tanggal Lahir',
-                    align: 'center',
-                    key: 'tgl_lahir',
-                },
-                {
                     title: 'No WA',
                     align: 'end',
                     key: 'no_wa',
                 },
                 {
-                    title: "Provinsi",
+                    title: 'Status Tutor',
                     align: 'center',
-                    key: 'provinsi',
+                    key: 'status_tutor',
                 },
-                {
-                    title: 'Kota',
-                    align: 'center',
-                    key: 'kota',
-                },
-                {
-                    title: 'Kode Pos',
-                    align: 'center',
-                    key: 'kode_pos',
-                },
-                {
-                    title: 'Alamat Lengkap',
-                    align: 'start',
-                    key: 'alamat_lengkap',
-                }
             ],
-            url: '/siswa',
+            url: '/course',
         }),
         methods: {
             async deleteConfirm(id) {
                 const { loadingAlert, successAlert, errorAlert, questionAlert } = useSwal();
-                let confirm = await questionAlert('Yakin ingin menghapus data siswa?');
+                let confirm = await questionAlert('Yakin ingin menghapus data course?');
                 if(confirm) {
                     loadingAlert('Loading...');
                     try {
-                        const response = await axios.post('/siswa/delete/' + id);
+                        const response = await axios.post('/course/delete/' + id);
                         successAlert(response.data.message);
-                        this.$refs.siswaTable.loadItems();
+                        this.$refs.courseTable.loadItems();
                     } catch(error) {
                         if (error.response) {
                             errorAlert(error.response.data.message);
@@ -104,11 +89,11 @@
                 }
             },
             tambahData() {
-                this.$router.push('/siswa/create');
+                this.$router.push('/course/create');
             },
             editData(id) {
-                this.$router.push('/siswa/edit/' + id);
+                this.$router.push('/course/edit/' + id);
             }
         }
-    };
+    }
 </script>

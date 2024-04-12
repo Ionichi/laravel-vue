@@ -51,6 +51,24 @@ const routes = [
         meta: { requiresAuth: true },
     },
     {
+        path: '/course',
+        name: 'course',
+        component: () => import('../views/pages/course/CourseView.vue'),
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/course/create',
+        name: 'course-create',
+        component: () => import('../views/pages/course/CourseCreateView.vue'),
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/course/edit/:id',
+        name: 'course-edit',
+        component: () => import('../views/pages/course/CourseEditView.vue'),
+        meta: { requiresAuth: true },
+    },
+    {
         path: '/:catchAll(.*)',
         name: 'not-found',
         // route level code-splitting
